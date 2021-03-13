@@ -32,30 +32,44 @@ end
 
 defmodule DatabaseServer do
   def start do
-    spawn(&loop/0) # el codigo que se llama aqui corre en otro proceso
+    connection = :random.uniform(1000)
+    spawn(fn -> loop(connection) end)
   end
 
-  defp loop do
+  defp loop(connection) do
     receive do
       {:run_query, caller, query_def} ->
-        send(caller, {:query_result, sync_query(query_def)})
+        send(caller, {:query_result, sync_query(connection, query_def)})
     end
-    loop()
+    loop(connection)
   end
 
-  defp sync_query(query_def) do
+  defp sync_query(connection, query_def) do
     :timer.sleep(2000)
-    "#{query_def} result"
+    "Connection: #{connection} : #{query_def} result"
   end
 
   # TAREA ⭐
-  def send_query(server, caller, query_def) do
-    send(server, {:run_query,caller, query_def })
+  def send_query(server_pid, query_def) do
+    send(server_pid, {:run_query, self(), query_def })
   end
 
   def get_result do
     receive do
-      {:query_result, result} -> IO.puts(result)
+      {:query_result, result} -> result
+    after 5000 ->
+      {:error, :timeout}
     end
   end
 end
+
+# Procesos concurrentes
+
+pool = 1..100 |>
+  Enum.map(fn(_) -> DatabaseServer.start end)
+
+1..100 |>
+  Enum.each(fn(query_def) ->
+    server_pid = Enum.at(pool, :random.uniform(100) -1)
+    DatabaseServer.send_query(server_pid, query_def)
+  end)
