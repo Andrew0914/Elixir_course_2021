@@ -1,4 +1,4 @@
-defmodule ShoppingMall.Application do
+defmodule CostcoMall.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -7,27 +7,28 @@ defmodule ShoppingMall.Application do
 
   def start(_type, _args) do
     children = [
-      {ShoppingMall.CartAgent, %ShoppingMall.ShoppingCart{}},
+      # Start the Ecto repository
+      CostcoMall.Repo,
       # Start the Telemetry supervisor
-      ShoppingMallWeb.Telemetry,
+      CostcoMallWeb.Telemetry,
       # Start the PubSub system
-      {Phoenix.PubSub, name: ShoppingMall.PubSub},
+      {Phoenix.PubSub, name: CostcoMall.PubSub},
       # Start the Endpoint (http/https)
-      ShoppingMallWeb.Endpoint
-      # Start a worker by calling: ShoppingMall.Worker.start_link(arg)
-      # {ShoppingMall.Worker, arg}
+      CostcoMallWeb.Endpoint
+      # Start a worker by calling: CostcoMall.Worker.start_link(arg)
+      # {CostcoMall.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: ShoppingMall.Supervisor]
+    opts = [strategy: :one_for_one, name: CostcoMall.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    ShoppingMallWeb.Endpoint.config_change(changed, removed)
+    CostcoMallWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

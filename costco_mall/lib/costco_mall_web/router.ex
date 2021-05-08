@@ -1,5 +1,5 @@
-defmodule ShoppingMallWeb.Router do
-  use ShoppingMallWeb, :router
+defmodule CostcoMallWeb.Router do
+  use CostcoMallWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,18 +13,17 @@ defmodule ShoppingMallWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", ShoppingMallWeb do
+  scope "/", CostcoMallWeb do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/cart", CartController, :index
-    post "/cart/update", CartController, :update
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", ShoppingMallWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", CostcoMallWeb do
+    pipe_through :api
+    resources "/carts", CartController, except: [:new, :edit]
+  end
 
   # Enables LiveDashboard only for development
   #
@@ -38,7 +37,7 @@ defmodule ShoppingMallWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: ShoppingMallWeb.Telemetry
+      live_dashboard "/dashboard", metrics: CostcoMallWeb.Telemetry
     end
   end
 end

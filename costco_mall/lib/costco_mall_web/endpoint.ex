@@ -1,21 +1,20 @@
-defmodule HelloWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :hello
+defmodule CostcoMallWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :costco_mall
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_hello_key",
-    signing_salt: "w4ykAUnZ"
+    key: "_costco_mall_key",
+    signing_salt: "v1MCksSj"
   ]
 
-  socket "/socket", HelloWeb.UserSocket,
+  socket "/socket", CostcoMallWeb.UserSocket,
     websocket: true,
     longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
-  IO.puts("Entrando al endpoint 🐦")
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -23,7 +22,7 @@ defmodule HelloWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :hello,
+    from: :costco_mall,
     gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
@@ -33,7 +32,7 @@ defmodule HelloWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :hello
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :costco_mall
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,
@@ -47,9 +46,9 @@ defmodule HelloWeb.Endpoint do
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
-  IO.puts("Ejecutar el MethodOverride 🍿")
+
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug HelloWeb.Router
+  plug CostcoMallWeb.Router
 end
