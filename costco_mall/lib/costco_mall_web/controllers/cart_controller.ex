@@ -11,6 +11,21 @@ defmodule CostcoMallWeb.CartController do
     render(conn, "index.json", carts: carts)
   end
 
+  def index(conn, %{"count" => count}) do
+    carts = Mall.filter_carts(%{"count" => count})
+    render(conn, "index.json", carts: carts)
+  end
+
+  def index(conn, %{"total" => total}) do
+    carts = Mall.filter_carts(%{"total" => total})
+    render(conn, "index.json", carts: carts)
+  end
+
+  def index(conn, %{"total" => total, "count" => count}) do
+    carts = Mall.filter_carts( %{"total" => total, "count" => count})
+    render(conn, "index.json", carts: carts)
+  end
+
   def create(conn, %{"cart" => cart_params}) do
     with {:ok, %Cart{} = cart} <- Mall.create_cart(cart_params) do
       conn

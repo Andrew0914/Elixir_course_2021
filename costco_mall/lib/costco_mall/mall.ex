@@ -102,10 +102,10 @@ defmodule CostcoMall.Mall do
     Cart.changeset(cart, attrs)
   end
 
-  def get_carts_non_empty() do
+  def filter_carts(filters) do
+    IO.inspect(filters)
     query = from c in Cart,
-            where: c.count > 0,
-            select: c
+            where: ^filters
     Repo.all(query)
   end
 end
